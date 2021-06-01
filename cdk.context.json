@@ -1,0 +1,14 @@
+{
+  "development": {
+    "spacetraders": "https://dev-api.spacetraders.io/game/status",
+    "openweather": "https://dev-api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}"
+  },
+  "test": {
+    "spacetraders": "https://test-api.spacetraders.io/game/status",
+    "openweather": "https://test-api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}"
+  },
+  "production": {
+    "spacetraders": "https://api.spacetraders.io/game/status",
+    "openweather": "https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}"
+  }
+}
