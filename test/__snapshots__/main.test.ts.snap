@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CDK Tests Snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "AssetParameters1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7ArtifactHash77383C27": Object {
+      "Description": "Artifact hash for asset \\"1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7\\"",
+      "Type": "String",
+    },
+    "AssetParameters1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7S3Bucket32030740": Object {
+      "Description": "S3 bucket for asset \\"1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7\\"",
+      "Type": "String",
+    },
+    "AssetParameters1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7S3VersionKeyE8BB9E47": Object {
+      "Description": "S3 key for asset version \\"1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "MyFunction3BAA72D1": Object {
+      "DependsOn": Array [
+        "MyFunctionServiceRole3C357FF2",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7S3Bucket32030740",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7S3VersionKeyE8BB9E47",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters1fb4d749c776ee2aff065e27d26fd95cc2e2e3e8fd528f596f40b19be98290f7S3VersionKeyE8BB9E47",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "MyFunctionServiceRole3C357FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "MyFunctionServiceRole3C357FF2": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;

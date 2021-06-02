@@ -6,31 +6,45 @@ interface EndPointConfig {
   readonly openweather: string;
 }
 
+export interface IStackProps extends StackProps {
+  environment: string;
+}
+
 export class MyStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
+  constructor(scope: Construct, id: string, props: IStackProps) {
     super(scope, id, props);
 
-    const environment: string = process.env.ENV_NAME || 'development';
-    const envConfig: EndPointConfig = scope.node.tryGetContext(environment);
+    // const environment: string = process.env.ENV_NAME || 'development';
+    const envConfig: EndPointConfig = scope.node.tryGetContext(props.environment);
+
+    console.log('ENV CONFIG IS: ', envConfig);
+    console.log('props: ', props);
+
+    // const spaceTraderEndpoint = envConfig.spacetraders;
+    // const openWeatherEndpoint = envConfig.openweather;
+    // console.log('spaceTraderEndpoint: ', spaceTraderEndpoint);
+    // console.log('openWeatherEndpoint: ', openWeatherEndpoint);
 
     new lambda.NodejsFunction(this, 'MyFunction', {
       entry: './functions/hello/index.ts',
       environment: {
-        SPACETRADERS_API: envConfig.spacetraders,
-        OPENWEATHER_API: envConfig.openweather,
+        // SPACETRADERS_API: spaceTraderEndpoint,
+        // OPENWEATHER_API: openWeatherEndpoint,
       },
       handler: 'index.handler',
     });
   }
 }
 
-const devEnv = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
+const app = new App();
+const props = {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+  environment: app.node.tryGetContext('environment') ?? 'development',
 };
 
-const app = new App();
-
-new MyStack(app, 'my-stack-dev', { env: devEnv });
+new MyStack(app, 'my-stack-dev', { ...props });
 
 app.synth();
