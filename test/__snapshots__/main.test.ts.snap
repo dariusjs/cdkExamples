@@ -63,6 +63,8 @@ Object {
         "Environment": Object {
           "Variables": Object {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "OPENWEATHER_API": "https://dev-api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}",
+            "SPACETRADERS_API": "https://dev-api.spacetraders.io/game/status",
           },
         },
         "Handler": "index.index.handler",

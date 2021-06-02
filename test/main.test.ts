@@ -5,6 +5,7 @@ import { MyStack } from '../src/main';
 describe('CDK Tests', () => {
   beforeAll(() => {
     const env = process.env;
+    env.ENVIRONMENT = 'development';
     env.CDK_CONTEXT_JSON =
       '{"development": { "spacetraders": "https://dev-api.spacetraders.io/game/status", "openweather": "https://dev-api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}"}}';
   });
@@ -13,10 +14,10 @@ describe('CDK Tests', () => {
     const app = new App();
     const props = {
       env: {
-        account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION,
+        account: '12345678',
+        region: 'down-under-1',
       },
-      environment: app.node.tryGetContext('environment') ?? 'development',
+      environment: 'development',
     };
     const stack = new MyStack(app, 'test', { ...props });
 

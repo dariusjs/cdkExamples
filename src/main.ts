@@ -14,22 +14,16 @@ export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: IStackProps) {
     super(scope, id, props);
 
-    // const environment: string = process.env.ENV_NAME || 'development';
-    const envConfig: EndPointConfig = scope.node.tryGetContext(props.environment);
+    const envConfig: EndPointConfig = scope.node.tryGetContext(props.environment) ?? {};
 
-    console.log('ENV CONFIG IS: ', envConfig);
-    console.log('props: ', props);
-
-    // const spaceTraderEndpoint = envConfig.spacetraders;
-    // const openWeatherEndpoint = envConfig.openweather;
-    // console.log('spaceTraderEndpoint: ', spaceTraderEndpoint);
-    // console.log('openWeatherEndpoint: ', openWeatherEndpoint);
+    const spaceTraderEndpoint = envConfig.spacetraders ?? 'https://somehwere.local';
+    const openWeatherEndpoint = envConfig.openweather ?? 'https://overthere.local';
 
     new lambda.NodejsFunction(this, 'MyFunction', {
       entry: './functions/hello/index.ts',
       environment: {
-        // SPACETRADERS_API: spaceTraderEndpoint,
-        // OPENWEATHER_API: openWeatherEndpoint,
+        SPACETRADERS_API: spaceTraderEndpoint,
+        OPENWEATHER_API: openWeatherEndpoint,
       },
       handler: 'index.handler',
     });
