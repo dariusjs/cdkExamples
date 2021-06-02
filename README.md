@@ -3,7 +3,7 @@
 
 ## Environment specifics using CDK Context
 
-[Gerald Stewart](https://twitter.com/_gerald20) recently posted an [article](https://dev.to/aws-builders/aws-cdk-per-environment-configuration-patterns-48m6)  which describes nicely how to deal with Environment specifc configurations when deploying your stacks. In this [example](https://github.com/dariusjs/cdkExamples) below from I thought I would implement a full example using an AWS Lambda where we set the API endpoints as environment variables. This might help to see how a full implementation could look like.
+[Gerald Stewart](https://twitter.com/_gerald20) recently posted a nice [article](https://dev.to/aws-builders/aws-cdk-per-environment-configuration-patterns-48m6)  which describes how to deal with Environment specifc configurations when deploying your stacks. In this [example](https://github.com/dariusjs/cdkExamples) below I will go through a complete example using AWS Lambda where we set the API endpoints as environment variables. This might help to see how a full implementation could look like.
 
 
 ## Bootstrap with Projen
