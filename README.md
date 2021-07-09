@@ -1,5 +1,9 @@
 # CDK Examples
 
-https://github.com/dariusjs/cdkExamples/cdkEnvAware
+Environment Specific CDK config
 
-https://github.com/dariusjs/cdkExamples/cdkGoPackage
+<https://dariusjs.github.io/cdkExamples/cdkEnvAware/>
+
+Packaging a go app witg CDK
+
+<https://dariusjs.github.io/cdkExamples/cdkGoPackage/>
