@@ -2,6 +2,9 @@
 
 ## Introduction 
 
+### EDIT - 2021-07-13 - The below is not needed anymore for Go from version v1.103.0 as the higher level construct aws-lambda-go is introduced https://docs.aws.amazon.com/cdk/api/latest/docs/aws-lambda-go-readme.html
+
+
 CDK has been a boon for me when building and managing services. Packaging up and deploying software has usually involved building some custom build scripts and then co-ordinating the sequencing of these scripts to make sure you have a valid asset that can be deployed. CDK has some constructs available for simplifying Javascript and Pythong deployments  
 <https://docs.aws.amazon.com/cdk/api/latest/docs/aws-lambda-nodejs-readme.html>  
 <https://docs.aws.amazon.com/cdk/api/latest/docs/aws-lambda-python-readme.html> 
