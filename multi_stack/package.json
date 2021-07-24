@@ -1,5 +1,9 @@
 {
-  "name": "cdktest",
+  "name": "multi_stack",
+  "version": "0.1.0",
+  "bin": {
+    "multi_stack": "bin/multi_stack.js"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",

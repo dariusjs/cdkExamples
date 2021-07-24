@@ -1,5 +1,9 @@
-import * as lambda from '@aws-cdk/aws-lambda-nodejs';
-import { App, Construct, Stack, StackProps } from '@aws-cdk/core';
+// import * as lambda from '@aws-cdk/aws-lambda-nodejs';
+// import { App, Construct, Stack, StackProps } from '@aws-cdk/core';
+import { Stack, StackProps, App } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
+
+import { Construct } from 'constructs';
 
 interface EndPointConfig {
   readonly spacetraders: string;
@@ -14,18 +18,22 @@ export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: IStackProps) {
     super(scope, id, props);
 
-    const envConfig: EndPointConfig = scope.node.tryGetContext(props.environment) ?? {};
+    const envConfig: EndPointConfig =
+      scope.node.tryGetContext(props.environment) ?? {};
 
-    const spaceTraderEndpoint = envConfig.spacetraders ?? 'https://somehwere.local';
-    const openWeatherEndpoint = envConfig.openweather ?? 'https://overthere.local';
+    const spaceTraderEndpoint =
+      envConfig.spacetraders ?? 'https://somehwere.local';
+    const openWeatherEndpoint =
+      envConfig.openweather ?? 'https://overthere.local';
 
-    new lambda.NodejsFunction(this, 'MyFunction', {
+    new cdk.aws_lambda_nodejs.NodejsFunction(this, 'MyFunction', {
       entry: './functions/hello/index.ts',
       environment: {
         SPACETRADERS_API: spaceTraderEndpoint,
         OPENWEATHER_API: openWeatherEndpoint,
       },
-      handler: 'index.handler',
+      handler: 'handler',
+      runtime: cdk.aws_lambda.Runtime.NODEJS_14_X,
     });
   }
 }
