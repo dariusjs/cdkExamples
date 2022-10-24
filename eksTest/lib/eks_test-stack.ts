@@ -6,11 +6,14 @@ export class EksTestStack extends cdk.Stack {
     super(scope, id, props);
 
     const cluster = new cdk.aws_eks.Cluster(this, 'HelloEKS', {
-      version: cdk.aws_eks.KubernetesVersion.V1_20,
+      clusterName: 'test',
+      version: cdk.aws_eks.KubernetesVersion.V1_21,
       defaultCapacity: 0,
     });
+    cdk.Tags.of(cluster).add(`auto-stop`, 'no');
+    cdk.Tags.of(cluster).add(`auto-delete`, 'no');
 
-    cluster.addNodegroupCapacity('on-demand-node-group', {
+    const onDemandNg = cluster.addNodegroupCapacity('on-demand-node-group', {
       instanceTypes: [
         new cdk.aws_ec2.InstanceType('t3.medium'),
         new cdk.aws_ec2.InstanceType('t3a.medium'),
@@ -26,7 +29,7 @@ export class EksTestStack extends cdk.Stack {
       amiType: cdk.aws_eks.NodegroupAmiType.AL2_X86_64,
     });
 
-    cluster.addNodegroupCapacity('spot-node-group', {
+    const spotNg = cluster.addNodegroupCapacity('spot-node-group', {
       instanceTypes: [
         new cdk.aws_ec2.InstanceType('t3.medium'),
         new cdk.aws_ec2.InstanceType('t3a.medium'),
@@ -43,18 +46,61 @@ export class EksTestStack extends cdk.Stack {
       capacityType: cdk.aws_eks.CapacityType.SPOT,
     });
 
+    cdk.Tags.of(onDemandNg).add(`k8s.io/cluster-autoscaler/enabled`, 'true');
+    cdk.Tags.of(onDemandNg).add('k8s.io/cluster-autoscaler/test', 'true');
+    cdk.Tags.of(onDemandNg).add(`auto-stop`, 'no');
+    cdk.Tags.of(onDemandNg).add(`auto-delete`, 'no');
+    cdk.Tags.of(spotNg).add(`k8s.io/cluster-autoscaler/enabled`, 'true');
+    cdk.Tags.of(spotNg).add('k8s.io/cluster-autoscaler/test', 'true');
+    cdk.Tags.of(spotNg).add(`auto-stop`, 'no');
+    cdk.Tags.of(spotNg).add(`auto-delete`, 'no');
+
     cluster.addManifest('pod', {
-      apiVersion: 'v1',
-      kind: 'Pod',
-      metadata: { name: 'pod' },
+      apiVersion: 'apps/v1',
+      kind: 'Deployment',
+      metadata: {
+        name: 'hello',
+        labels: {
+          app: 'hello',
+        },
+      },
       spec: {
-        containers: [
-          {
-            name: 'hello',
-            image: 'tutum/hello-world',
-            ports: [{ containerPort: 80 }],
+        replicas: 3,
+        selector: {
+          matchLabels: {
+            app: 'hello',
           },
-        ],
+        },
+        template: {
+          metadata: {
+            labels: {
+              app: 'hello',
+            },
+            annotations: {
+              'prometheus.io/scrape': 'true',
+              'prometheus.io/port': '8080',
+            },
+          },
+          spec: {
+            containers: [
+              {
+                name: 'hello-kubernetes',
+                image: 'paulbouwer/hello-kubernetes:1.5',
+                ports: [{ containerPort: 8080 }],
+                resources: {
+                  requests: {
+                    cpu: '250m',
+                    memory: '256Mi',
+                  },
+                  limits: {
+                    cpu: '250m',
+                    memory: '512Mi',
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
     });
 
