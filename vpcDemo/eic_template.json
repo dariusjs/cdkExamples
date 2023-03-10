@@ -1,0 +1,10 @@
+{
+  "Resources": {
+    "Endpoint": {
+      "Type": "AWS::EC2::InstanceConnectEndpoint",
+      "Properties": {
+        "SubnetId": "subnet-0d5c142b8bae0513b"
+      }
+    }
+  }
+}
