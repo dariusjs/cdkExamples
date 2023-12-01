@@ -44,6 +44,7 @@ export class KinesisLogCollectorStack extends cdk.Stack {
       }),
     );
 
+    // const kinesisDestination = new Blah(
     const kinesisDestination = new cdk.aws_logs_destinations.KinesisDestination(
       kinesisStream,
       /* all optional props */ {
@@ -76,5 +77,7 @@ export class KinesisLogCollectorStack extends cdk.Stack {
         }`,
       },
     );
+
+    cfnDestination.node.addDependency(role);
   }
 }

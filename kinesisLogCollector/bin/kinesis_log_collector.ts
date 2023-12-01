@@ -2,8 +2,10 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { KinesisLogCollectorStack } from '../lib/kinesis_log_collector-stack';
+import { Dependable } from 'constructs';
 
 const app = new cdk.App();
+
 new KinesisLogCollectorStack(app, 'KinesisLogCollectorStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
