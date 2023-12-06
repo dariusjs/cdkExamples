@@ -33,6 +33,18 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
                     {
                       "Variable": "$.detail.configuration.metrics[0].metricStat.metric.namespace",
                       "StringEquals": "AWS/SageMaker"
+                    },
+                    {
+                      "Or": [
+                        {
+                          "Variable": "$.detail.state.value",
+                          "StringEquals": "ALARM"
+                        },
+                        {
+                          "Variable": "$.detail.state.value",
+                          "StringEquals": " INSUFFICIENT_DATA"
+                        }
+                      ]
                     }
                   ],
                   "Next": "DeleteEndpoint"
@@ -68,10 +80,15 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
                       "StringEquals": "true"
                     }
                   ],
-                  "Next": "PutMetricAlarm"
+                  "Next": "Wait"
                 }
               ],
               "Default": "OtherCalls"
+            },
+            "Wait": {
+              "Type": "Wait",
+              "Seconds": 900,
+              "Next": "PutMetricAlarm"
             },
             "PutMetricAlarm": {
               "Type": "Task",
@@ -87,11 +104,11 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
                 ],
                 "ComparisonOperator": "LessThanOrEqualToThreshold",
                 "DatapointsToAlarm": 3,
-                "EvaluationPeriods": 4,
-                "Period": 60,
+                "EvaluationPeriods": 3,
+                "Period": 600,
                 "Statistic": "Maximum",
                 "Threshold": 0,
-                "TreatMissingData": "notBreaching"
+                "TreatMissingData": "breaching"
               },
               "Resource": "arn:aws:states:::aws-sdk:cloudwatch:putMetricAlarm",
               "End": true

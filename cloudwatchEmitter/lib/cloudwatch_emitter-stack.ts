@@ -10,6 +10,7 @@ export class CloudwatchEmitterStack extends cdk.Stack {
 
     const logGroup = new cdk.aws_logs.LogGroup(this, 'LogGroup', {
       retention: cdk.aws_logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     const importedStream = cdk.aws_kinesis.Stream.fromStreamArn(
       this,
