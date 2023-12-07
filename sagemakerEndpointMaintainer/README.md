@@ -17,3 +17,6 @@ If the Alarm reaches the breached state of no detected invocations:
 1. Eventbridge issues a DeleteEndpoint command to remove the idle endpoint
 2. After the endpoint is deleted an event is fired by Eventbridge to cleanup the idle alarm
 
+# References
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data
