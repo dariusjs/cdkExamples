@@ -87,7 +87,7 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
             },
             "Wait": {
               "Type": "Wait",
-              "Seconds": 900,
+              "Seconds": 1800,
               "Next": "PutMetricAlarm"
             },
             "PutMetricAlarm": {
@@ -100,12 +100,16 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
                   {
                     "Name": "EndpointName",
                     "Value.$": "$.detail.EndpointName"
+                  },
+                  {
+                    "Name": "VariantName",
+                    "Value": "AllTraffic"
                   }
                 ],
                 "ComparisonOperator": "LessThanOrEqualToThreshold",
                 "DatapointsToAlarm": 3,
                 "EvaluationPeriods": 3,
-                "Period": 600,
+                "Period": 300,
                 "Statistic": "Maximum",
                 "Threshold": 0,
                 "TreatMissingData": "breaching"
