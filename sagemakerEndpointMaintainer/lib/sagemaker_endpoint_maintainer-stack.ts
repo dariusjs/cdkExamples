@@ -87,7 +87,7 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
             },
             "Wait": {
               "Type": "Wait",
-              "Seconds": 1800,
+              "Seconds": 300,
               "Next": "PutMetricAlarm"
             },
             "PutMetricAlarm": {
@@ -151,7 +151,7 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
     //   "Parameters": {
     //     "DeploymentConfig": {
     //       "AutoRollbackConfiguration": {
-    //         "Alarms.$": "States.Array(States.StringToJson(States.Format('\{\"AlarmName\": \"{}\"\}', $.AlarmName)))"
+    //         "Alarms.$": "States.Array(States.StringToJson(States.Format('\{\\"AlarmName\\": \\"{}\\"\}', $.AlarmName)))"
     //       }
     //     },
     //     "EndpointConfigName": "string",
