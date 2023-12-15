@@ -1,16 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class SagemakerEndpointMaintainerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    // sns topic
-    const topic = new cdk.aws_sns.Topic(
-      this,
-      'sagemaker-endpoint-maintainer-topic',
-    );
 
     const stateMachine = new cdk.aws_stepfunctions.StateMachine(
       this,
@@ -142,24 +135,6 @@ export class SagemakerEndpointMaintainerStack extends cdk.Stack {
         `),
       },
     );
-
-    // TODO - update the endpoint to link the Cloudwatch Alarm in the Sagemaker UI
-    //
-    // "SageMaker UpdateEndpoint": {
-    //   "Type": "Task",
-    //   "Resource": "arn:aws:states:::sagemaker:updateEndpoint",
-    //   "Parameters": {
-    //     "DeploymentConfig": {
-    //       "AutoRollbackConfiguration": {
-    //         "Alarms.$": "States.Array(States.StringToJson(States.Format('\{\\"AlarmName\\": \\"{}\\"\}', $.AlarmName)))"
-    //       }
-    //     },
-    //     "EndpointConfigName": "string",
-    //     "EndpointName.$": "$.AlarmName",
-    //     "RetainAllVariantProperties": true
-    //   },
-    //   "End": true
-    // },
 
     stateMachine.addToRolePolicy(
       new cdk.aws_iam.PolicyStatement({
