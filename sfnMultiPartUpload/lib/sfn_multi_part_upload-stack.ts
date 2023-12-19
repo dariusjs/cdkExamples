@@ -30,8 +30,29 @@ export class SfnMultiPartUploadStack extends cdk.Stack {
                 "Key.$": "$.source.Key"
               },
               "Resource": "arn:aws:states:::aws-sdk:s3:headObject",
-              "Next": "Lambda Invoke",
+              "Next": "LargerThan50Mib?",
               "ResultPath": "$.source.data"
+            },
+            "LargerThan50Mib?": {
+              "Type": "Choice",
+              "Choices": [
+                {
+                  "Variable": "$.source.data.ContentLength",
+                  "NumericGreaterThan": 52428800,
+                  "Next": "Lambda Invoke"
+                }
+              ],
+              "Default": "CopyObject"
+            },
+            "CopyObject": {
+              "Type": "Task",
+              "End": true,
+              "Parameters": {
+                "Bucket.$": "$.destination.Bucket",
+                "Key.$": "$.destination.Key",
+                "CopySource.$": "States.Format('{}/{}', $.source.Bucket, $.source.Key)"
+              },
+              "Resource": "arn:aws:states:::aws-sdk:s3:copyObject"
             },
             "Lambda Invoke": {
               "Type": "Task",
